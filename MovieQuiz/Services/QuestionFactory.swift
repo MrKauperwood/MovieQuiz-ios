@@ -7,7 +7,7 @@
 
 import Foundation
 
-class QuestionFactory: QuestionFactoryProtocol {
+final class QuestionFactory: QuestionFactoryProtocol {
     private var remainingQuestions: [QuizQuestion]
     weak var delegate: QuestionFactoryDelegate?
 

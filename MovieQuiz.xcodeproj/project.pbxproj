@@ -17,7 +17,7 @@
 		AD77F5742857F8810062FB14 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD77F5732857F8810062FB14 /* Date+Extensions.swift */; };
 		AD7AFA552836189F00399704 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7AFA542836189F00399704 /* Array+Extensions.swift */; };
 		F07442002B85D6B80083DE2F /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07441FF2B85D6B80083DE2F /* AlertModel.swift */; };
-		F07442022B85D86B0083DE2F /* AlertPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07442012B85D86B0083DE2F /* AlertPresentor.swift */; };
+		F07442022B85D86B0083DE2F /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07442012B85D86B0083DE2F /* AlertPresenter.swift */; };
 		F07442042B8F80D70083DE2F /* StatisticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07442032B8F80D70083DE2F /* StatisticService.swift */; };
 		F07442062B8F94D50083DE2F /* StatisticServiceImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07442052B8F94D50083DE2F /* StatisticServiceImplementation.swift */; };
 		F0B4D9512B2065D20062C85B /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0B4D94F2B2065D20062C85B /* YS Display-Bold.ttf */; };
@@ -43,7 +43,7 @@
 		AD77F5732857F8810062FB14 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		AD7AFA542836189F00399704 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		F07441FF2B85D6B80083DE2F /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
-		F07442012B85D86B0083DE2F /* AlertPresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresentor.swift; sourceTree = "<group>"; };
+		F07442012B85D86B0083DE2F /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		F07442032B8F80D70083DE2F /* StatisticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticService.swift; sourceTree = "<group>"; };
 		F07442052B8F94D50083DE2F /* StatisticServiceImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticServiceImplementation.swift; sourceTree = "<group>"; };
 		F0B4D94F2B2065D20062C85B /* YS Display-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Bold.ttf"; sourceTree = "<group>"; };
@@ -72,7 +72,7 @@
 			children = (
 				AD1ABAB52831907B00B3E448 /* MovieQuizViewController.swift */,
 				AD1ABAB72831907B00B3E448 /* Main.storyboard */,
-				F07442012B85D86B0083DE2F /* AlertPresentor.swift */,
+				F07442012B85D86B0083DE2F /* AlertPresenter.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -237,7 +237,7 @@
 				AD5EE5DE284D7887003966EF /* UIColor+Extensions.swift in Sources */,
 				F07442002B85D6B80083DE2F /* AlertModel.swift in Sources */,
 				AD7AFA552836189F00399704 /* Array+Extensions.swift in Sources */,
-				F07442022B85D86B0083DE2F /* AlertPresentor.swift in Sources */,
+				F07442022B85D86B0083DE2F /* AlertPresenter.swift in Sources */,
 				F0D2C0BA2B77B83100D5B64D /* QuestionFactoryProtocol.swift in Sources */,
 				F0F16EEF2B7A16400024C8EE /* QuestionFactoryDelegate.swift in Sources */,
 				AD1ABAB62831907B00B3E448 /* MovieQuizViewController.swift in Sources */,
