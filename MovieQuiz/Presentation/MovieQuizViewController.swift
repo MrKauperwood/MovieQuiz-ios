@@ -14,7 +14,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         return QuizStepViewModel(
-            image: UIImage(named: model.image) ?? UIImage(),
+            image: UIImage(data: model.image) ?? UIImage(),
             text: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
         )
@@ -26,10 +26,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
 
     private func setupQuiz() {
-        questionFactory = QuestionFactory()
+        imageView.layer.cornerRadius = 20
+        questionFactory = QuestionFactory(moviesLoader : MoviesLoader(), delegate: self)
         statisticService = StatisticServiceImplementation()
-        questionFactory?.delegate = self
-        questionFactory?.requestNextQuestion()
+        showLoadingIndicator()
+        questionFactory?.loadData()
     }
 
     // MARK: - QuestionFactoryDelegate
@@ -46,6 +47,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
     }
 
+    @IBOutlet private var activityIndicator: UIActivityIndicatorView!
+    
     @IBOutlet private var imageView: UIImageView!
 
     @IBOutlet private var counterLabel: UILabel!
@@ -85,8 +88,33 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = isEnabled ? 8 : 0
         imageView.layer.cornerRadius = isEnabled ? 6 : 0
+        imageView.layer.cornerRadius = 20
     }
 
+    private func showLoadingIndicator() {
+        activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
+        activityIndicator.startAnimating() // включаем анимацию
+    }
+    
+    private func hideLoadingIndicator() {
+        activityIndicator.isHidden = true // говорим, что индикатор загрузки не скрыт
+    }
+    
+    private func showNetworkError(message: String) {
+        hideLoadingIndicator() // скрываем индикатор загрузки
+        
+        let errorModel = AlertModel(title: "Что-то пошло не так(", message: message, buttonText: "Попробовать ещё раз") {
+            [weak self] in
+                    guard let self = self else { return }
+            self.currentQuestionIndex = 0
+            self.correctAnswers = 0
+            showLoadingIndicator()
+            questionFactory?.loadData() //   тестовый вызов
+            self.questionFactory?.requestNextQuestion()
+        }
+        alertPresenter.present(alertModel: errorModel, on: self)
+    }
+    
     private func showAnswerResult(isCorrect: Bool) {
         changeImageState(isEnabled: true)
         imageView.layer.cornerRadius = 20
@@ -133,7 +161,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private func resetQuiz() {
         correctAnswers = 0
         currentQuestionIndex = 0
-        questionFactory?.resetQuestions()
         questionFactory?.requestNextQuestion()
         changeImageState(isEnabled: false)
     }
@@ -148,5 +175,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             questionFactory?.requestNextQuestion()
         }
         setButtonsEnabled(true)
+    }
+    
+    func didLoadDataFromServer() {
+        activityIndicator.isHidden = true // скрываем индикатор загрузки
+        questionFactory?.requestNextQuestion()
+    }
+
+    func didFailToLoadData(with error: Error) {
+        print("Ошибка загрузки данных: \(error.localizedDescription)") //Логирую
+        showNetworkError(message: "Невозможно загрузить данные")
     }
 }
