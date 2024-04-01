@@ -9,6 +9,7 @@ import Foundation
 
 protocol QuestionFactoryProtocol {
     var delegate: QuestionFactoryDelegate? { get set }
+    var movies: [MostPopularMovie] {get set}
     func requestNextQuestion()
-    func resetQuestions()
+    func loadData()
 }
