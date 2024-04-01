@@ -23,6 +23,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupQuiz()
+        initialStateForTheElements()
     }
 
     private func setupQuiz() {
@@ -32,10 +33,23 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         showLoadingIndicator()
         questionFactory?.loadData()
     }
+    
+    private func initialStateForTheElements() {
+        // Настройка индикатора загрузки
+        activityIndicator.hidesWhenStopped = true
+        
+        // Установка прозрачного фона для imageView
+        imageView.backgroundColor = UIColor.clear
+        
+        // Очищаем текст в label
+        textLabel.text = ""
+        counterLabel.text = ""
+    }
 
     // MARK: - QuestionFactoryDelegate
 
     func didReceiveNextQuestion(question: QuizQuestion?) {
+        hideLoadingIndicator()
         guard let question = question else {
             return
         }
@@ -92,12 +106,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
 
     private func showLoadingIndicator() {
-        activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
         activityIndicator.startAnimating() // включаем анимацию
     }
     
     private func hideLoadingIndicator() {
-        activityIndicator.isHidden = true // говорим, что индикатор загрузки не скрыт
+        activityIndicator.stopAnimating() // включаем анимацию
     }
     
     private func showNetworkError(message: String) {
@@ -109,7 +122,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
             showLoadingIndicator()
-            questionFactory?.loadData() //   тестовый вызов
+            questionFactory?.loadData()
             self.questionFactory?.requestNextQuestion()
         }
         alertPresenter.present(alertModel: errorModel, on: self)
@@ -166,6 +179,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
 
     private func showNextQuestionOrResults() {
+        showLoadingIndicator()
         if currentQuestionIndex == questionsAmount - 1 {
             showQuizResults()
         } else {
@@ -178,11 +192,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     func didLoadDataFromServer() {
-        activityIndicator.isHidden = true // скрываем индикатор загрузки
+        hideLoadingIndicator() // скрываем индикатор загрузки
         questionFactory?.requestNextQuestion()
     }
 
     func didFailToLoadData(with error: Error) {
+        hideLoadingIndicator()
         print("Ошибка загрузки данных: \(error.localizedDescription)") //Логирую
         showNetworkError(message: "Невозможно загрузить данные")
     }

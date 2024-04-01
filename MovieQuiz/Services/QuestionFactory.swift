@@ -9,6 +9,10 @@ import Foundation
 
 final class QuestionFactory: QuestionFactoryProtocol {
     private let moviesLoader: MoviesLoading
+
+    private var averageRating: Float = 0.0
+    private var standardDeviation: Float = 0.0
+
     internal weak var delegate: QuestionFactoryDelegate?
     internal var movies: [MostPopularMovie] = []
     
@@ -32,13 +36,23 @@ final class QuestionFactory: QuestionFactoryProtocol {
                 print("Failed to load image")
             }
             
-            let rating = Float(movie.rating) ?? 0
+            // Генерация порогового значения
+            let lowerBound = self.averageRating - self.standardDeviation
+            let upperBound = self.averageRating + self.standardDeviation
+            let thresholdRating = Float.random(in: lowerBound...upperBound)
             
-            let text = "Рейтинг этого фильма больше чем 6?"
-            let correctAnswer = rating > 6
+            // Определение типа вопроса (больше или меньше)
+            let isQuestionForHigherRating = Bool.random()
+            let questionType = isQuestionForHigherRating ? "больше" : "меньше"
+            
+            
+            let rating = Float(movie.rating) ?? 0
+            let questionText = "Рейтинг этого фильма \(questionType) чем \(String(format: "%.1f", thresholdRating))?"
+                    
+            let correctAnswer = rating > thresholdRating
             
             let question = QuizQuestion(image: imageData,
-                                         text: text,
+                                         text: questionText,
                                         correctQuestion: correctAnswer)
             
             DispatchQueue.main.async { [weak self] in
@@ -55,11 +69,22 @@ final class QuestionFactory: QuestionFactoryProtocol {
                 switch result {
                 case .success(let mostPopularMovies):
                     self.movies = mostPopularMovies.items
+                    self.analyzeRatings()
                     self.delegate?.didLoadDataFromServer()
                 case .failure(let error):
                     self.delegate?.didFailToLoadData(with: error)
                 }
             }
         }
+    }
+    
+    private func analyzeRatings() {
+        let ratings = movies.compactMap { Float($0.rating) } // Преобразование рейтингов фильмов в массив чисел
+        guard !ratings.isEmpty else { return } // Проверка, что массив не пустой
+        
+        self.averageRating = ratings.reduce(0, +) / Float(ratings.count) // Вычисление среднего значения рейтингов
+        let sumOfSquaredAvgDiff = ratings.map { pow($0 - averageRating, 2) }.reduce(0, +) // Сумма квадратов разностей рейтингов и среднего значения
+        self.standardDeviation = sqrt(sumOfSquaredAvgDiff / Float(ratings.count)) // Вычисление стандартного отклонения
+        
     }
 }
