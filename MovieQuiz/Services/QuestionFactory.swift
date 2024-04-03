@@ -79,12 +79,11 @@ final class QuestionFactory: QuestionFactoryProtocol {
     }
     
     private func analyzeRatings() {
-        let ratings = movies.compactMap { Float($0.rating) } // Преобразование рейтингов фильмов в массив чисел
-        guard !ratings.isEmpty else { return } // Проверка, что массив не пустой
+        let ratings = movies.compactMap { Float($0.rating) }
+        guard !ratings.isEmpty else { return }
         
-        self.averageRating = ratings.reduce(0, +) / Float(ratings.count) // Вычисление среднего значения рейтингов
-        let sumOfSquaredAvgDiff = ratings.map { pow($0 - averageRating, 2) }.reduce(0, +) // Сумма квадратов разностей рейтингов и среднего значения
-        self.standardDeviation = sqrt(sumOfSquaredAvgDiff / Float(ratings.count)) // Вычисление стандартного отклонения
-        
+        self.averageRating = ratings.reduce(0, +) / Float(ratings.count)
+        let sumOfSquaredAvgDiff = ratings.map { pow($0 - averageRating, 2) }.reduce(0, +)
+        self.standardDeviation = sqrt(sumOfSquaredAvgDiff / Float(ratings.count))
     }
 }
