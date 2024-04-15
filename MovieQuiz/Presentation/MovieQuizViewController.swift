@@ -1,24 +1,15 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
-    private var currentQuestionIndex = 0
     private var correctAnswers = 0
 
+    private let presenter = MovieQuizPresenter()
     private var statisticService: StatisticService?
 
-    private var questionsAmount = 10
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
 
     private let alertPresenter = AlertPresenter()
-
-    private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        return QuizStepViewModel(
-            image: UIImage(data: model.image) ?? UIImage(),
-            text: model.text,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
-        )
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,7 +46,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
 
         currentQuestion = question
-        let viewModel = convert(model: question)
+        let viewModel = presenter.convert(model: question)
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
         }
@@ -119,13 +110,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let errorModel = AlertModel(title: "Что-то пошло не так(", message: message, buttonText: "Попробовать ещё раз") {
             [weak self] in
                     guard let self = self else { return }
-            self.currentQuestionIndex = 0
+            self.presenter.resetQuestionIndex()
             self.correctAnswers = 0
             showLoadingIndicator()
             questionFactory?.loadData()
             self.questionFactory?.requestNextQuestion()
         }
-        alertPresenter.present(alertModel: errorModel, on: self)
+        alertPresenter.present(alertModel: errorModel, on: self, withId: "Error alert")
     }
     
     private func showAnswerResult(isCorrect: Bool) {
@@ -144,7 +135,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private func showQuizResults() {
         // Обновляем статистику
         guard var statisticService = statisticService else { return }
-        statisticService.store(correct: correctAnswers, totalAmount: questionsAmount)
+        statisticService.store(correct: correctAnswers, totalAmount: presenter.questionsAmount)
 
         let bestGame = statisticService.bestGame
         let gamesCount = statisticService.gamesCount + 1
@@ -155,17 +146,21 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         dateFormatter.dateFormat = "dd.MM.yy HH:mm"
         let dateStr = dateFormatter.string(from: bestGame.date)
         let message = """
-        Ваш результат: \(correctAnswers)/\(questionsAmount)
+        Ваш результат: \(correctAnswers)/\(presenter.questionsAmount)
         Количество сыгранных квизов: \(gamesCount)
         Рекорд: \(bestGame.correct)/\(bestGame.total) (\(dateStr))
         Средняя точность: \(String(format: "%.2f", totalAccuracy))
         """
 
         // Создаем AlertModel и показываем алерт
-        let model = AlertModel(title: "Этот раунд окончен!", message: message, buttonText: "Сыграть еще раз") {
-            self.resetQuiz()
-        }
-        alertPresenter.present(alertModel: model, on: self)
+        let model = AlertModel(
+            title: "Этот раунд окончен!",
+            message: message,
+            buttonText: "Сыграть еще раз") {
+                self.resetQuiz()
+            }
+        
+        alertPresenter.present(alertModel: model, on: self, withId: "Game results")
 
         // Увеличиваем счетчик игр
         statisticService.gamesCount = gamesCount
@@ -173,17 +168,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
     private func resetQuiz() {
         correctAnswers = 0
-        currentQuestionIndex = 0
+        presenter.resetQuestionIndex()
         questionFactory?.requestNextQuestion()
         changeImageState(isEnabled: false)
     }
 
     private func showNextQuestionOrResults() {
         showLoadingIndicator()
-        if currentQuestionIndex == questionsAmount - 1 {
+        if presenter.isLastQuestion() {
             showQuizResults()
         } else {
-            currentQuestionIndex += 1
+            presenter.switchToNextQuestion()
             changeImageState(isEnabled: false)
 
             questionFactory?.requestNextQuestion()
