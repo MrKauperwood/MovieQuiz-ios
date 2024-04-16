@@ -18,6 +18,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
 
     private func setupQuiz() {
+        presenter.viewController = self
         imageView.layer.cornerRadius = 20
         questionFactory = QuestionFactory(moviesLoader : MoviesLoader(), delegate: self)
         statisticService = StatisticServiceImplementation()
@@ -66,14 +67,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
     @IBAction private func noButtonClicked(_: UIButton) {
         setButtonsEnabled(false)
-        guard let currentQuestion = currentQuestion else { return }
-        showAnswerResult(isCorrect: currentQuestion.correctQuestion == false)
+        presenter.currentQuestion = currentQuestion
+        presenter.noButtonClicked()
     }
 
     @IBAction private func yesButtonClicked(_: UIButton) {
         setButtonsEnabled(false)
-        guard let currentQuestion = currentQuestion else { return }
-        showAnswerResult(isCorrect: currentQuestion.correctQuestion == true)
+        presenter.currentQuestion = currentQuestion
+        presenter.yesButtonClicked()
     }
 
     private func setButtonsEnabled(_ isEnabled: Bool) {
@@ -119,7 +120,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         alertPresenter.present(alertModel: errorModel, on: self, withId: "Error alert")
     }
     
-    private func showAnswerResult(isCorrect: Bool) {
+    func showAnswerResult(isCorrect: Bool) {
         changeImageState(isEnabled: true)
         imageView.layer.cornerRadius = 20
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
