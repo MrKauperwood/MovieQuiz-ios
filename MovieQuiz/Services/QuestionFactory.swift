@@ -53,7 +53,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
             
             let question = QuizQuestion(image: imageData,
                                          text: questionText,
-                                        correctQuestion: correctAnswer)
+                                        correctAnswer: correctAnswer)
             
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }

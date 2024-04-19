@@ -90,8 +90,10 @@ final class MovieQuizUITests: XCTestCase {
         let alertHeader = alert.label
         let alertButtonText = alert.buttons.firstMatch.label
         
+        sleep(sleepTime)
+        
         XCTAssertEqual(alertHeader, "Этот раунд окончен!")
-        XCTAssertEqual(alertButtonText, "Сыграть еще раз")
+        XCTAssertEqual(alertButtonText, "Сыграть ещё раз")
     }
     
     func testRestartGame() {
@@ -104,6 +106,7 @@ final class MovieQuizUITests: XCTestCase {
         
         let secondPosterData = getScreenshotForTheImage(withId: "Poster")
         
+        sleep(sleepTime)
         checkTextInTheQuestionIndex(currentQuestion: 1)
         XCTAssertNotEqual(firstPosterData, secondPosterData)
     }
@@ -128,6 +131,7 @@ final class MovieQuizUITests: XCTestCase {
     
     func checkTextInTheQuestionIndex(currentQuestion : Int) {
         let indexLabel = app.staticTexts["Index"]
+        sleep(sleepTime)
         XCTAssertEqual(indexLabel.label, "\(currentQuestion)/\(amountOfQuestions)")
     }
     

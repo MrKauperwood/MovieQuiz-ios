@@ -17,12 +17,15 @@ final class StatisticServiceImplementation: StatisticService {
         if newRecord.isBetterThan(currentBest) {
             bestGame = newRecord
         }
-
+        
         var totalCorrect = userDefaults.integer(forKey: Keys.correct.rawValue)
         var totalQuestions = userDefaults.integer(forKey: Keys.total.rawValue)
 
         totalCorrect += count
         totalQuestions += totalAmount
+        
+        let currentGamesCount = userDefaults.integer(forKey: Keys.gamesCount.rawValue)
+            userDefaults.set(currentGamesCount + 1, forKey: Keys.gamesCount.rawValue)
 
         userDefaults.set(totalCorrect, forKey: Keys.correct.rawValue)
         userDefaults.set(totalQuestions, forKey: Keys.total.rawValue)
@@ -31,7 +34,7 @@ final class StatisticServiceImplementation: StatisticService {
     var totalAccuracy: Double {
         let correct = userDefaults.integer(forKey: Keys.correct.rawValue)
         let total = userDefaults.integer(forKey: Keys.total.rawValue)
-        return total > 0 ? Double(correct) / Double(total) : 0
+        return total > 0 ? 100.0 * Double(correct) / Double(total) : 0
     }
 
     var gamesCount: Int {
