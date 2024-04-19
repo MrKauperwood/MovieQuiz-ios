@@ -9,15 +9,15 @@ import Foundation
 import UIKit
 
 final class AlertPresenter {
-    func present(alertModel: AlertModel, on viewController: UIViewController, withId : String) {
+    func present(alertModel: AlertModel, on viewController: UIViewController, withId: String) {
         let alert = UIAlertController(
             title: alertModel.title,
             message: alertModel.message,
             preferredStyle: .alert
         )
-        
+
         alert.view.accessibilityIdentifier = withId
-        
+
         let action = UIAlertAction(
             title: alertModel.buttonText,
             style: .default

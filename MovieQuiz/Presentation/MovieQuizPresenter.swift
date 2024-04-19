@@ -110,7 +110,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
 
     private func proceedToNextQuestionOrResults() {
-        if self.isLastQuestion() {
+        if isLastQuestion() {
             let text = makeResultsMessage()
 
             let model = AlertModel(
@@ -124,9 +124,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             viewController?.show(quiz: model)
         } else {
             viewController?.showLoadingIndicator()
-            self.switchToNextQuestion()
+            switchToNextQuestion()
             questionFactory?.requestNextQuestion()
-            
         }
     }
 
@@ -138,11 +137,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         let totalPlaysCountLine = "Количество сыгранных квизов: \(statisticService.gamesCount)"
         let currentGameResultLine = "Ваш результат: \(correctAnswers)/\(questionsAmount)"
         let bestGameInfoLine = "Рекорд: \(bestGame.correct)/\(bestGame.total)"
-        + " (\(bestGame.date.dateTimeString))"
+            + " (\(bestGame.date.dateTimeString))"
         let averageAccuracyLine = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
 
         let resultMessage = [
-        currentGameResultLine, totalPlaysCountLine, bestGameInfoLine, averageAccuracyLine
+            currentGameResultLine, totalPlaysCountLine, bestGameInfoLine, averageAccuracyLine,
         ].joined(separator: "\n")
 
         return resultMessage

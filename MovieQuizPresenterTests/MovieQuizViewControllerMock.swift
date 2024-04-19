@@ -1,15 +1,14 @@
 //
-//  MovieQuizPresenterTests.swift
+//  MovieQuizViewControllerMock.swift
 //  MovieQuizPresenterTests
 //
 //  Created by Aleksei Bondarenko on 18.4.2024.
 //
 
-import XCTest
 @testable import MovieQuiz
+import XCTest
 
 final class MovieQuizViewControllerMock: XCTestCase {
-
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -32,5 +31,4 @@ final class MovieQuizViewControllerMock: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
-
 }
