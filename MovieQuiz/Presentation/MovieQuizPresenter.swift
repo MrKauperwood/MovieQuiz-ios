@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 final class MovieQuizPresenter: QuestionFactoryDelegate {
-    private let statisticService: StatisticService!
+    private let statisticService: StatisticService?
     private var questionFactory: QuestionFactoryProtocol?
     private weak var viewController: MovieQuizViewControllerProtocol?
 
@@ -52,11 +52,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
     }
 
-    func isLastQuestion() -> Bool {
+    private func isLastQuestion() -> Bool {
         currentQuestionIndex == questionsAmount - 1
     }
 
-    func didAnswer(isCorrectAnswer: Bool) {
+    private func didAnswer(isCorrectAnswer: Bool) {
         if isCorrectAnswer {
             correctAnswers += 1
         }
@@ -68,7 +68,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         questionFactory?.requestNextQuestion()
     }
 
-    func switchToNextQuestion() {
+    private func switchToNextQuestion() {
         currentQuestionIndex += 1
     }
 
@@ -129,7 +129,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
     }
 
-    func makeResultsMessage() -> String {
+    private func makeResultsMessage() -> String {
+        guard let statisticService = statisticService else {
+            return "Statistic service is not available."
+        }
+
         statisticService.store(correct: correctAnswers, totalAmount: questionsAmount)
 
         let bestGame = statisticService.bestGame
