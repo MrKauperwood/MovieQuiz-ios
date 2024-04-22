@@ -114,9 +114,9 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             let text = makeResultsMessage()
 
             let model = AlertModel(
-                title: "Этот раунд окончен!",
+                title: "This round is over!",
                 message: text,
-                buttonText: "Сыграть ещё раз",
+                buttonText: "Play Again",
                 completion: { [weak self] in
                     self?.restartGame()
                 }
@@ -138,11 +138,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
 
         let bestGame = statisticService.bestGame
 
-        let totalPlaysCountLine = "Количество сыгранных квизов: \(statisticService.gamesCount)"
-        let currentGameResultLine = "Ваш результат: \(correctAnswers)/\(questionsAmount)"
-        let bestGameInfoLine = "Рекорд: \(bestGame.correct)/\(bestGame.total)"
+        let totalPlaysCountLine = "Total quizzes played: \(statisticService.gamesCount)"
+        let currentGameResultLine = "Your result: \(correctAnswers)/\(questionsAmount)"
+        let bestGameInfoLine = "Record: \(bestGame.correct)/\(bestGame.total)"
             + " (\(bestGame.date.dateTimeString))"
-        let averageAccuracyLine = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
+        let averageAccuracyLine = "Average accuracy: \(String(format: "%.2f", statisticService.totalAccuracy))%"
 
         let resultMessage = [
             currentGameResultLine, totalPlaysCountLine, bestGameInfoLine, averageAccuracyLine,

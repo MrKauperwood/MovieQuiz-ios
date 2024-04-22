@@ -1,4 +1,4 @@
-// Rus version
+// Eng version
 import UIKit
 
 final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
@@ -60,8 +60,8 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     }
 
     func showLoadingIndicator() {
-        activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
-        activityIndicator.startAnimating() // включаем анимацию
+        activityIndicator.isHidden = false // Indicate that the loading indicator is not hidden
+        activityIndicator.startAnimating() // Start the animation
     }
 
     func hideLoadingIndicator() {
@@ -77,9 +77,9 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         hideLoadingIndicator()
 
         let alertModel = AlertModel(
-            title: "Ошибка",
+            title: "Error",
             message: message,
-            buttonText: "Попробовать ещё раз",
+            buttonText: "Try Again",
             completion: { [weak self] in
                 self?.presenter.restartGame()
             }

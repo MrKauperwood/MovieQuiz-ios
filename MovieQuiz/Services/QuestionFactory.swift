@@ -36,17 +36,17 @@ final class QuestionFactory: QuestionFactoryProtocol {
                 print("Failed to load image")
             }
 
-            // Генерация порогового значения
+            // Generating threshold value
             let lowerBound = self.averageRating - self.standardDeviation
             let upperBound = self.averageRating + self.standardDeviation
             let thresholdRating = Float.random(in: lowerBound ... upperBound)
 
-            // Определение типа вопроса (больше или меньше)
+            // Defining the type of question (higher or lower)
             let isQuestionForHigherRating = Bool.random()
-            let questionType = isQuestionForHigherRating ? "больше" : "меньше"
+            let questionType = isQuestionForHigherRating ? "higher" : "lower"
 
             let rating = Float(movie.rating) ?? 0
-            let questionText = "Рейтинг этого фильма \(questionType) чем \(String(format: "%.1f", thresholdRating))?"
+            let questionText = "Is the rating of this movie \(questionType) than \(String(format: "%.1f", thresholdRating))?"
 
             let correctAnswer = rating > thresholdRating
 

@@ -15,19 +15,18 @@ final class MoviesLoaderTests: XCTestCase {
         let loader = MoviesLoader(networkClient: stubNetworkClient)
 
         // When
-
-        // так как функция загрузки фильмов — асинхронная, нужно ожидание
+        // As the movie loading function is asynchronous, we need to wait
         let expectation = expectation(description: "Loading expectation")
 
         loader.loadMovies { result in
             // Then
             switch result {
             case let .success(movies):
-                // сравниваем данные с тем, что мы предполагали
+                // We compare the data to what we expected
                 XCTAssertEqual(movies.items.count, 2)
                 expectation.fulfill()
             case .failure:
-                // мы не ожидаем, что пришла ошибка; если она появится, надо будет провалить тест
+                // We do not expect an error; if one appears, the test should fail
                 XCTFail("Unexpected failure")
             }
         }
@@ -47,7 +46,7 @@ final class MoviesLoaderTests: XCTestCase {
             // Then
             switch result {
             case .success:
-                XCTFail("Unexpected failure")
+                XCTFail("Unexpected success")
             case let .failure(error):
                 XCTAssertNotNil(error)
                 expectation.fulfill()

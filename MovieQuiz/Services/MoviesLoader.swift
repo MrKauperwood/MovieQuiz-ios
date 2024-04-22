@@ -23,7 +23,7 @@ struct MoviesLoader: MoviesLoading {
     // MARK: - URL
 
     private var mostPopularMoviesUrl: URL {
-        // Если мы не смогли преобразовать строку в URL, то приложение упадёт с ошибкой
+        // If we cannot convert the string to a URL, the application will crash with an error
         guard let url = URL(string: "https://tv-api.com/en/API/Top250Movies/k_zcuw1ytf") else {
             preconditionFailure("Unable to construct mostPopularMoviesUrl")
         }
@@ -39,7 +39,7 @@ struct MoviesLoader: MoviesLoading {
                 do {
                     let moviesResponse = try JSONDecoder().decode(MostPopularMovies.self, from: data)
                     if let errorMessage = moviesResponse.errorMessage, !errorMessage.isEmpty {
-                        // Здесь создаем свою ошибку с полученным сообщением, чтобы передать ее в handler
+                        // Here we create our own error with the received message to pass it to the handler
                         let error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: errorMessage])
                         handler(.failure(error))
                     } else {

@@ -78,8 +78,8 @@ final class MovieQuizUITests: XCTestCase {
 
         sleep(sleepTime)
 
-        XCTAssertEqual(alertHeader, "Этот раунд окончен!")
-        XCTAssertEqual(alertButtonText, "Сыграть ещё раз")
+        XCTAssertEqual(alertHeader, "This round is over!")
+        XCTAssertEqual(alertButtonText, "Play Again")
     }
 
     func testRestartGame() {
