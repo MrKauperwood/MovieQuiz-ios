@@ -1,3 +1,4 @@
+// Rus version
 import UIKit
 
 final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
